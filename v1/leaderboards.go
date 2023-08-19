@@ -60,3 +60,32 @@ func GetLeaderboardCategory(gameId string, categoryId string) (*LeaderboardCateg
 	}
 	return data, nil
 }
+
+func GetLeaderboardLevelCategory(gameId string, levelId string, categoryId string) (*LeaderboardCategoryResponse, error) {
+	headers := map[string]string{
+		"Accept":       "application/json",
+		"Content-Type": "application/json",
+	}
+	jsonBody, err := json.Marshal(map[string]string{})
+	if err != nil {
+		return nil, err
+	}
+	reqBody := bytes.NewBuffer(jsonBody)
+	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("leaderboards/%s/level/%s/%s", gameId, levelId, categoryId), http.MethodGet, headers, reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	bodyBytes := make([]byte, 0)
+	if _, err := resp.Body.Read(bodyBytes); err != nil {
+		return nil, err
+	}
+	if err := resp.Body.Close(); err != nil {
+		return nil, err
+	}
+	data := new(LeaderboardCategoryResponse)
+	if err := json.Unmarshal(bodyBytes, &data); err != nil {
+		return nil, err
+	}
+	return data, nil
+}
