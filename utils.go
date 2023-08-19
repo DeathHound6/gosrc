@@ -3,12 +3,25 @@ package gosrc
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"strings"
 	"time"
 )
 
+var (
+	DeprecatedAPIVersions = []string{}
+	logger                = log.Default()
+)
+
 func MakeRequest(apiVersion string, endpoint string, method string, headers map[string]string, body io.Reader) (*http.Response, error) {
+	for index := range DeprecatedAPIVersions {
+		if DeprecatedAPIVersions[index] == apiVersion {
+			logger.Print(fmt.Sprintf("WARN: API Version %s is deprecated", apiVersion))
+			break
+		}
+	}
+
 	url := fmt.Sprintf("https://speedrun.com/api/%s/%s", apiVersion, endpoint)
 
 	req, err := http.NewRequest(method, url, body)
