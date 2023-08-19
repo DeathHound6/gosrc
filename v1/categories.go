@@ -32,7 +32,11 @@ type CategoryVariableResponse struct {
 	Data []*Variable `json:"data"`
 }
 
-func GetCategory(id string) (*CategoryResponse, error) {
+type CategoryRecordsResponse struct {
+	Data []*Leaderboard `json:"data"`
+}
+
+func GetCategory(categoryId string) (*CategoryResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
@@ -42,7 +46,7 @@ func GetCategory(id string) (*CategoryResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("categories/%s", id), http.MethodGet, headers, reqBody)
+	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("categories/%s", categoryId), http.MethodGet, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}
@@ -54,14 +58,14 @@ func GetCategory(id string) (*CategoryResponse, error) {
 	if err := resp.Body.Close(); err != nil {
 		return nil, err
 	}
-	data := &CategoryResponse{}
+	data := new(CategoryResponse)
 	if err := json.Unmarshal(bodyBytes, data); err != nil {
 		return nil, err
 	}
 	return data, nil
 }
 
-func GetCategoryVariables(id string) ([]*CategoryVariableResponse, error) {
+func GetCategoryVariables(categoryId string) (*CategoryVariableResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
@@ -71,7 +75,7 @@ func GetCategoryVariables(id string) ([]*CategoryVariableResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("categories/%s/variables", id), http.MethodGet, headers, reqBody)
+	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("categories/%s/variables", categoryId), http.MethodGet, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}
@@ -83,13 +87,38 @@ func GetCategoryVariables(id string) ([]*CategoryVariableResponse, error) {
 	if err := resp.Body.Close(); err != nil {
 		return nil, err
 	}
-	data := make([]*CategoryVariableResponse, 0)
+	data := new(CategoryVariableResponse)
 	if err := json.Unmarshal(bodyBytes, &data); err != nil {
 		return nil, err
 	}
 	return data, nil
 }
 
-func GetCategoryRecords(id string) []*Leaderboard {
+func GetCategoryRecords(categoryId string) (*CategoryRecordsResponse, error) {
+	headers := map[string]string{
+		"Accept":       "application/json",
+		"Content-Type": "application/json",
+	}
+	jsonBody, err := json.Marshal(map[string]string{})
+	if err != nil {
+		return nil, err
+	}
+	reqBody := bytes.NewBuffer(jsonBody)
+	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("categories/%s/variables", categoryId), http.MethodGet, headers, reqBody)
+	if err != nil {
+		return nil, err
+	}
 
+	bodyBytes := make([]byte, 0)
+	if _, err := resp.Body.Read(bodyBytes); err != nil {
+		return nil, err
+	}
+	if err := resp.Body.Close(); err != nil {
+		return nil, err
+	}
+	data := new(CategoryRecordsResponse)
+	if err := json.Unmarshal(bodyBytes, &data); err != nil {
+		return nil, err
+	}
+	return data, nil
 }
