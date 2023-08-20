@@ -105,6 +105,15 @@ type PostRunBody struct {
 	Run *PostRunBodyRun `json:"run"`
 }
 
+type PutRunStatusBodyStatus struct {
+	Status string `json:"status"`
+	Reason string `json:"reason"`
+}
+
+type PutRunStatusBody struct {
+	Status *PutRunStatusBodyStatus `json:"status"`
+}
+
 type RunsResponse struct {
 	Data []*Run `json:"data"`
 }
@@ -216,4 +225,34 @@ func PostRun(body *PostRunBody) (*RunResponse, error) {
 		data.error = errors.New(data.Message)
 		return nil, data
 	}
+}
+
+// This endpoint requires Authentication
+func PutRunStatus(runId string, body *PutRunStatusBody) (*RunResponse, error) {
+	headers := map[string]string{
+		"Accept":       "application/json",
+		"Content-Type": "application/json",
+	}
+	jsonBody, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	reqBody := bytes.NewBuffer(jsonBody)
+	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("runs/%s/status", runId), http.MethodPut, headers, reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	bodyBytes := make([]byte, 0)
+	if _, err := resp.Body.Read(bodyBytes); err != nil {
+		return nil, err
+	}
+	if err := resp.Body.Close(); err != nil {
+		return nil, err
+	}
+	data := new(RunResponse)
+	if err := json.Unmarshal(bodyBytes, &data); err != nil {
+		return nil, err
+	}
+	return data, nil
 }
