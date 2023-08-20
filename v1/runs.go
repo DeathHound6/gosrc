@@ -70,6 +70,10 @@ type RunsResponse struct {
 	Data []*Run `json:"data"`
 }
 
+type RunResponse struct {
+	Data *Run `json:"data"`
+}
+
 func GetRuns() (*RunsResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
@@ -93,6 +97,35 @@ func GetRuns() (*RunsResponse, error) {
 		return nil, err
 	}
 	data := new(RunsResponse)
+	if err := json.Unmarshal(bodyBytes, &data); err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func GetRun(runId string) (*RunResponse, error) {
+	headers := map[string]string{
+		"Accept":       "application/json",
+		"Content-Type": "application/json",
+	}
+	jsonBody, err := json.Marshal(map[string]string{})
+	if err != nil {
+		return nil, err
+	}
+	reqBody := bytes.NewBuffer(jsonBody)
+	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("runs/%s", runId), http.MethodGet, headers, reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	bodyBytes := make([]byte, 0)
+	if _, err := resp.Body.Read(bodyBytes); err != nil {
+		return nil, err
+	}
+	if err := resp.Body.Close(); err != nil {
+		return nil, err
+	}
+	data := new(RunResponse)
 	if err := json.Unmarshal(bodyBytes, &data); err != nil {
 		return nil, err
 	}
