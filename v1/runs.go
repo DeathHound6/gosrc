@@ -114,6 +114,16 @@ type PutRunStatusBody struct {
 	Status *PutRunStatusBodyStatus `json:"status"`
 }
 
+type PutRunPlayersBodyPlayer struct {
+	Rel  string `json:"rel"`
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+type PutRunPlayersBody struct {
+	Players []*PutRunPlayersBodyPlayer `json:"players"`
+}
+
 type RunsResponse struct {
 	Data []*Run `json:"data"`
 }
@@ -239,6 +249,36 @@ func PutRunStatus(runId string, body *PutRunStatusBody) (*RunResponse, error) {
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
 	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("runs/%s/status", runId), http.MethodPut, headers, reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	bodyBytes := make([]byte, 0)
+	if _, err := resp.Body.Read(bodyBytes); err != nil {
+		return nil, err
+	}
+	if err := resp.Body.Close(); err != nil {
+		return nil, err
+	}
+	data := new(RunResponse)
+	if err := json.Unmarshal(bodyBytes, &data); err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+// This endpoint requires Authentication
+func PutRunPlayers(runId string, body *PutRunPlayersBody) (*RunResponse, error) {
+	headers := map[string]string{
+		"Accept":       "application/json",
+		"Content-Type": "application/json",
+	}
+	jsonBody, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	reqBody := bytes.NewBuffer(jsonBody)
+	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("runs/%s/players", runId), http.MethodPut, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}
