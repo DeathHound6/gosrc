@@ -3,6 +3,7 @@ package v1
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"github.com/DeathHound6/gosrc"
 	"net/http"
 )
@@ -15,6 +16,10 @@ type Developer struct {
 
 type DevelopersResponse struct {
 	Data []*Developer `json:"data"`
+}
+
+type DeveloperResponse struct {
+	Data *Developer `json:"data"`
 }
 
 func GetDevelopers() (*DevelopersResponse, error) {
@@ -40,6 +45,35 @@ func GetDevelopers() (*DevelopersResponse, error) {
 		return nil, err
 	}
 	data := new(DevelopersResponse)
+	if err := json.Unmarshal(bodyBytes, &data); err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func GetDeveloper(developerId string) (*DeveloperResponse, error) {
+	headers := map[string]string{
+		"Accept":       "application/json",
+		"Content-Type": "application/json",
+	}
+	jsonBody, err := json.Marshal(map[string]string{})
+	if err != nil {
+		return nil, err
+	}
+	reqBody := bytes.NewBuffer(jsonBody)
+	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("developers/%s", developerId), http.MethodGet, headers, reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	bodyBytes := make([]byte, 0)
+	if _, err := resp.Body.Read(bodyBytes); err != nil {
+		return nil, err
+	}
+	if err := resp.Body.Close(); err != nil {
+		return nil, err
+	}
+	data := new(DeveloperResponse)
 	if err := json.Unmarshal(bodyBytes, &data); err != nil {
 		return nil, err
 	}
