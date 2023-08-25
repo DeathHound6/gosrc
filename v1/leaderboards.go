@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"gosrc"
+	"github.com/DeathHound6/gosrc"
 	"net/http"
 )
 
