@@ -118,3 +118,33 @@ func GetUser(userId string) (*UserResponse, error) {
 	}
 	return data, nil
 }
+
+// This endpoint requires Authentication
+func GetProfile() (*UserResponse, error) {
+	headers := map[string]string{
+		"Accept":       "application/json",
+		"Content-Type": "application/json",
+	}
+	jsonBody, err := json.Marshal(map[string]string{})
+	if err != nil {
+		return nil, err
+	}
+	reqBody := bytes.NewBuffer(jsonBody)
+	resp, err := gosrc.MakeRequest(APIVersion, "profile", http.MethodGet, headers, reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	bodyBytes := make([]byte, 0)
+	if _, err := resp.Body.Read(bodyBytes); err != nil {
+		return nil, err
+	}
+	if err := resp.Body.Close(); err != nil {
+		return nil, err
+	}
+	data := new(UserResponse)
+	if err := json.Unmarshal(bodyBytes, &data); err != nil {
+		return nil, err
+	}
+	return data, nil
+}
