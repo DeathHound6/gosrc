@@ -3,8 +3,18 @@ package v1
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/DeathHound6/gosrc"
+)
+
+type CategoryVariablesOrderBy string
+
+const (
+	CategoryVariablesOrderByName        CategoryVariablesOrderBy = "name"
+	CategoryVariablesOrderByMandatory   CategoryVariablesOrderBy = "mandatory"
+	CategoryVariablesOrderByUserDefined CategoryVariablesOrderBy = "user-defined"
+	CategoryVariablesOrderByPos         CategoryVariablesOrderBy = "pos"
 )
 
 type CategoryPlayers struct {
@@ -27,20 +37,24 @@ type CategoryResponse struct {
 	Data *Category `json:"data"`
 }
 
-type CategoryVariableResponse struct {
-	Data []*Variable `json:"data"`
+type CategoryQuery struct {
+	Embed *[]Embed
 }
 
-type CategoryRecordsResponse struct {
-	Data []*Leaderboard `json:"data"`
-}
-
-func (client *APIClient) GetCategory(categoryId string) (*CategoryResponse, error) {
+func (client *APIClient) GetCategory(categoryId string, queryParams *CategoryQuery) (*CategoryResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("categories/%s", categoryId), gosrc.HTTPMethodGET, headers, nil)
+	query := map[string]string{}
+	if queryParams != nil {
+		if queryParams.Embed != nil {
+			allowedEmbeds := []Embed{EmbedGame, EmbedVariables}
+			embeds := ValidateQueryEmbeds(*queryParams.Embed, allowedEmbeds)
+			query["embed"] = strings.Join(embeds, ",")
+		}
+	}
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("categories/%s?%s", categoryId, gosrc.MakeURLQuery(query)), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -59,12 +73,37 @@ func (client *APIClient) GetCategory(categoryId string) (*CategoryResponse, erro
 	return data, nil
 }
 
-func (client *APIClient) GetCategoryVariables(categoryId string) (*CategoryVariableResponse, error) {
+type CategoryVariableResponse struct {
+	Data       []*Variable         `json:"data"`
+	Pagination *PaginationResponse `json:"pagination"`
+}
+
+type CategoryVariablesQuery struct {
+	Embed     *[]Embed
+	OrderBy   *CategoryVariablesOrderBy
+	Direction *Direction
+}
+
+func (client *APIClient) GetCategoryVariables(categoryId string, queryParams *CategoryVariablesQuery) (*CategoryVariableResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("categories/%s/variables", categoryId), gosrc.HTTPMethodGET, headers, nil)
+	query := map[string]string{}
+	if queryParams != nil {
+		if queryParams.OrderBy != nil {
+			query["orderby"] = string(*queryParams.OrderBy)
+		}
+		if queryParams.Direction != nil {
+			query["direction"] = string(*queryParams.Direction)
+		}
+		if queryParams.Embed != nil {
+			allowedEmbeds := []Embed{EmbedGame, EmbedVariables}
+			embeds := ValidateQueryEmbeds(*queryParams.Embed, allowedEmbeds)
+			query["embed"] = strings.Join(embeds, ",")
+		}
+	}
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("categories/%s/variables?%s", categoryId, gosrc.MakeURLQuery(query)), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -83,12 +122,45 @@ func (client *APIClient) GetCategoryVariables(categoryId string) (*CategoryVaria
 	return data, nil
 }
 
-func (client *APIClient) GetCategoryRecords(categoryId string) (*CategoryRecordsResponse, error) {
+type CategoryRecordsResponse struct {
+	Data       []*Leaderboard      `json:"data"`
+	Pagination *PaginationResponse `json:"pagination"`
+}
+
+type CategoryRecordsQuery struct {
+	Embed     *[]Embed
+	Top       *int
+	SkipEmpty *bool
+	Offset    *int
+	Max       *int
+}
+
+func (client *APIClient) GetCategoryRecords(categoryId string, queryParams *CategoryRecordsQuery) (*CategoryRecordsResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("categories/%s/records", categoryId), gosrc.HTTPMethodGET, headers, nil)
+	query := map[string]string{}
+	if queryParams != nil {
+		if queryParams.Top != nil {
+			query["top"] = fmt.Sprintf("%d", *queryParams.Top)
+		}
+		if queryParams.SkipEmpty != nil {
+			query["skip-empty"] = fmt.Sprintf("%t", *queryParams.SkipEmpty)
+		}
+		if queryParams.Offset != nil {
+			query["offset"] = fmt.Sprintf("%d", *queryParams.Offset)
+		}
+		if queryParams.Max != nil {
+			query["max"] = fmt.Sprintf("%d", *queryParams.Max)
+		}
+		if queryParams.Embed != nil {
+			allowedEmbeds := []Embed{EmbedGame, EmbedVariables, EmbedLevel, EmbedPlayers, EmbedRegions, EmbedPlatforms}
+			embeds := ValidateQueryEmbeds(*queryParams.Embed, allowedEmbeds)
+			query["embed"] = strings.Join(embeds, ",")
+		}
+	}
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("categories/%s/records?%s", categoryId, gosrc.MakeURLQuery(query)), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
