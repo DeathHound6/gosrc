@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+
 	"github.com/DeathHound6/gosrc"
-	"net/http"
 )
 
 type VariableScope struct {
@@ -54,7 +54,7 @@ func GetVariable(variableId string) (*VariableResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("variables/%s", variableId), http.MethodGet, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("variables/%s", variableId), gosrc.HTTPMethodGET, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}

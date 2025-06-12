@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
 	"github.com/DeathHound6/gosrc"
-	"net/http"
 )
 
 type RunVideosLink struct {
@@ -150,7 +150,7 @@ func GetRuns() (*RunsResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("runs%s", ""), http.MethodGet, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "runs", gosrc.HTTPMethodGET, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}
@@ -179,7 +179,7 @@ func GetRun(runId string) (*RunResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("runs/%s", runId), http.MethodGet, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("runs/%s", runId), gosrc.HTTPMethodGET, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}
@@ -209,7 +209,7 @@ func PostRun(body *PostRunBody) (*RunResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, "runs", http.MethodPost, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "runs", gosrc.HTTPMethodPOST, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}
@@ -248,7 +248,7 @@ func PutRunStatus(runId string, body *PutRunStatusBody) (*RunResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("runs/%s/status", runId), http.MethodPut, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("runs/%s/status", runId), gosrc.HTTPMethodPUT, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}
@@ -278,7 +278,7 @@ func PutRunPlayers(runId string, body *PutRunPlayersBody) (*RunResponse, error) 
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("runs/%s/players", runId), http.MethodPut, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("runs/%s/players", runId), gosrc.HTTPMethodPUT, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}
@@ -308,7 +308,7 @@ func DeleteRun(runId string) (*RunResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("runs/%s", runId), http.MethodDelete, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("runs/%s", runId), gosrc.HTTPMethodDELETE, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}

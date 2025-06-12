@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+
 	"github.com/DeathHound6/gosrc"
-	"net/http"
 )
 
 type Level struct {
@@ -42,7 +42,7 @@ func GetLevel(levelId string) (*LevelResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("levels/%s", levelId), http.MethodGet, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("levels/%s", levelId), gosrc.HTTPMethodGET, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +71,7 @@ func GetLevelCategories(levelId string) (*LevelCategoriesResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("levels/%s/categories", levelId), http.MethodGet, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("levels/%s/categories", levelId), gosrc.HTTPMethodGET, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +100,7 @@ func GetLevelVariables(levelId string) (*LevelVariablesResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("levels/%s/variables", levelId), http.MethodGet, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("levels/%s/variables", levelId), gosrc.HTTPMethodGET, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +129,7 @@ func GetLevelRecords(levelId string) (*LevelRecordsResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("levels/%s/records", levelId), http.MethodGet, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("levels/%s/records", levelId), gosrc.HTTPMethodGET, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}

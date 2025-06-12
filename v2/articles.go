@@ -45,7 +45,7 @@ func GetArticle(id *int, slug *string) (*GetArticleResponse, error) {
 		"Accept": "application/json",
 	}
 
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("GetArticle?%s", query), "GET", headers, nil)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV2, fmt.Sprintf("GetArticle?%s", query), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}

@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+
 	"github.com/DeathHound6/gosrc"
-	"net/http"
 )
 
 type Developer struct {
@@ -32,7 +32,7 @@ func GetDevelopers() (*DevelopersResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, "developers", http.MethodGet, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "developers", gosrc.HTTPMethodGET, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func GetDeveloper(developerId string) (*DeveloperResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("developers/%s", developerId), http.MethodGet, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("developers/%s", developerId), gosrc.HTTPMethodGET, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}

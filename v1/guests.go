@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+
 	"github.com/DeathHound6/gosrc"
-	"net/http"
 )
 
 type Guest struct {
@@ -27,7 +27,7 @@ func GetGuest(guestName string) (*GuestResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("guests/%s", guestName), http.MethodGet, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("guests/%s", guestName), gosrc.HTTPMethodGET, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}

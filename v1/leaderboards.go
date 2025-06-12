@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+
 	"github.com/DeathHound6/gosrc"
-	"net/http"
 )
 
 type LeaderboardRun struct {
@@ -42,7 +42,7 @@ func GetLeaderboardCategory(gameId string, categoryId string) (*LeaderboardCateg
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("leaderboards/%s/categories/%s", gameId, categoryId), http.MethodGet, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("leaderboards/%s/categories/%s", gameId, categoryId), gosrc.HTTPMethodGET, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +71,7 @@ func GetLeaderboardLevelCategory(gameId string, levelId string, categoryId strin
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("leaderboards/%s/level/%s/%s", gameId, levelId, categoryId), http.MethodGet, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("leaderboards/%s/level/%s/%s", gameId, levelId, categoryId), gosrc.HTTPMethodGET, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}

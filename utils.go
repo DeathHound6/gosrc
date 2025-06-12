@@ -9,12 +9,24 @@ import (
 	"time"
 )
 
+type APIVersion string
+type HTTPMethod string
+
+const (
+	HTTPMethodGET    HTTPMethod = "GET"
+	HTTPMethodPOST   HTTPMethod = "POST"
+	HTTPMethodPUT    HTTPMethod = "PUT"
+	HTTPMethodDELETE HTTPMethod = "DELETE"
+	APIVersionV1     APIVersion = "v1"
+	APIVersionV2     APIVersion = "v2"
+)
+
 var (
-	DeprecatedAPIVersions = []string{}
+	DeprecatedAPIVersions = []APIVersion{APIVersionV1}
 	logger                = log.Default()
 )
 
-func MakeRequest(apiVersion string, endpoint string, method string, headers map[string]string, body io.Reader) (*http.Response, error) {
+func MakeRequest(apiVersion APIVersion, endpoint string, method HTTPMethod, headers map[string]string, body io.Reader) (*http.Response, error) {
 	for index := range DeprecatedAPIVersions {
 		if DeprecatedAPIVersions[index] == apiVersion {
 			logger.Printf("WARN: API Version %s is deprecated", apiVersion)
@@ -24,7 +36,7 @@ func MakeRequest(apiVersion string, endpoint string, method string, headers map[
 
 	url := fmt.Sprintf("https://speedrun.com/api/%s/%s", apiVersion, endpoint)
 
-	req, err := http.NewRequest(method, url, body)
+	req, err := http.NewRequest(string(method), url, body)
 	if err != nil {
 		return nil, err
 	}

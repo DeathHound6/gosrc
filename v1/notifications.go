@@ -3,8 +3,8 @@ package v1
 import (
 	"bytes"
 	"encoding/json"
+
 	"github.com/DeathHound6/gosrc"
-	"net/http"
 )
 
 type Notification struct {
@@ -31,7 +31,7 @@ func GetNotifications() (*NotificationsResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, "notifications", http.MethodGet, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "notifications", gosrc.HTTPMethodGET, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}
