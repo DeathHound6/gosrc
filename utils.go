@@ -17,7 +17,7 @@ var (
 func MakeRequest(apiVersion string, endpoint string, method string, headers map[string]string, body io.Reader) (*http.Response, error) {
 	for index := range DeprecatedAPIVersions {
 		if DeprecatedAPIVersions[index] == apiVersion {
-			logger.Print(fmt.Sprintf("WARN: API Version %s is deprecated", apiVersion))
+			logger.Printf("WARN: API Version %s is deprecated", apiVersion)
 			break
 		}
 	}
