@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/DeathHound6/gosrc"
 	"net/http"
+
+	"github.com/DeathHound6/gosrc"
 )
 
 type Region struct {
@@ -61,7 +62,7 @@ func GetRegion(regionId string) (*RegionResponse, error) {
 		return nil, err
 	}
 	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("regions", regionId), http.MethodGet, headers, reqBody)
+	resp, err := gosrc.MakeRequest(APIVersion, fmt.Sprintf("regions/%s", regionId), http.MethodGet, headers, reqBody)
 	if err != nil {
 		return nil, err
 	}
