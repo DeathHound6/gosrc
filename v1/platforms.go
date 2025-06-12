@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 
@@ -23,17 +22,12 @@ type PlatformResponse struct {
 	Data *Platform `json:"data"`
 }
 
-func GetPlatforms() (*PlatformsResponse, error) {
+func (client *APIClient) GetPlatforms() (*PlatformsResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "platforms", gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "platforms", gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -52,17 +46,12 @@ func GetPlatforms() (*PlatformsResponse, error) {
 	return data, nil
 }
 
-func GetPlatform(platformId string) (*PlatformResponse, error) {
+func (client *APIClient) GetPlatform(platformId string) (*PlatformResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("platforms/%s", platformId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("platforms/%s", platformId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}

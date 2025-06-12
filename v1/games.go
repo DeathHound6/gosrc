@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 
@@ -69,17 +68,12 @@ type GameRecordsResponse struct {
 	Data []*Leaderboard `json:"data"`
 }
 
-func GetGames() (*GamesResponse, error) {
+func (client *APIClient) GetGames() (*GamesResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "games", gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "games", gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -98,17 +92,12 @@ func GetGames() (*GamesResponse, error) {
 	return data, nil
 }
 
-func GetGame(gameId string) (*GameResponse, error) {
+func (client *APIClient) GetGame(gameId string) (*GameResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("games/%s", gameId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("games/%s", gameId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -127,17 +116,12 @@ func GetGame(gameId string) (*GameResponse, error) {
 	return data, nil
 }
 
-func GetGameCategories(gameId string) (*GameCategoriesResponse, error) {
+func (client *APIClient) GetGameCategories(gameId string) (*GameCategoriesResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("games/%s/categories", gameId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("games/%s/categories", gameId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -156,17 +140,12 @@ func GetGameCategories(gameId string) (*GameCategoriesResponse, error) {
 	return data, nil
 }
 
-func GetGameLevels(gameId string) (*GameLevelsResponse, error) {
+func (client *APIClient) GetGameLevels(gameId string) (*GameLevelsResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("games/%s/levels", gameId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("games/%s/levels", gameId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -185,17 +164,12 @@ func GetGameLevels(gameId string) (*GameLevelsResponse, error) {
 	return data, nil
 }
 
-func GetGameVariables(gameId string) (*GameVariablesResponse, error) {
+func (client *APIClient) GetGameVariables(gameId string) (*GameVariablesResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("games/%s/variables", gameId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("games/%s/variables", gameId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -214,17 +188,12 @@ func GetGameVariables(gameId string) (*GameVariablesResponse, error) {
 	return data, nil
 }
 
-func GetGameDerived(gameId string) (*GamesResponse, error) {
+func (client *APIClient) GetGameDerived(gameId string) (*GamesResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("games/%s/derived-games", gameId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("games/%s/derived-games", gameId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -243,17 +212,12 @@ func GetGameDerived(gameId string) (*GamesResponse, error) {
 	return data, nil
 }
 
-func GetGameRecords(gameId string) (*GameRecordsResponse, error) {
+func (client *APIClient) GetGameRecords(gameId string) (*GameRecordsResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("games/%s/records", gameId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("games/%s/records", gameId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}

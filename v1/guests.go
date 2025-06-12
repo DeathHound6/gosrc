@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 
@@ -17,17 +16,12 @@ type GuestResponse struct {
 	Data *Guest `json:"data"`
 }
 
-func GetGuest(guestName string) (*GuestResponse, error) {
+func (client *APIClient) GetGuest(guestName string) (*GuestResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("guests/%s", guestName), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("guests/%s", guestName), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}

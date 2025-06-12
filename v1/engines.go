@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 
@@ -22,17 +21,12 @@ type EngineResponse struct {
 	Data *Engine `json:"data"`
 }
 
-func GetEngines() (*EnginesResponse, error) {
+func (client *APIClient) GetEngines() (*EnginesResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "engines", gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "engines", gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -51,17 +45,12 @@ func GetEngines() (*EnginesResponse, error) {
 	return data, nil
 }
 
-func GetEngine(engineId string) (*EngineResponse, error) {
+func (client *APIClient) GetEngine(engineId string) (*EngineResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("engines/%s", engineId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("engines/%s", engineId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}

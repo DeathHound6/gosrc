@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 
@@ -22,17 +21,12 @@ type GametypeResponse struct {
 	Data *Gametype `json:"data"`
 }
 
-func GetGametypes() (*GametypesResponse, error) {
+func (client *APIClient) GetGametypes() (*GametypesResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "gametypes", gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "gametypes", gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -51,17 +45,12 @@ func GetGametypes() (*GametypesResponse, error) {
 	return data, nil
 }
 
-func GetGametype(gametypeId string) (*GametypeResponse, error) {
+func (client *APIClient) GetGametype(gametypeId string) (*GametypeResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("gametypes/%s", gametypeId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("gametypes/%s", gametypeId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}

@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 
@@ -22,17 +21,12 @@ type PublisherResponse struct {
 	Data *Publisher `json:"data"`
 }
 
-func GetPublishers() (*PublishersResponse, error) {
+func (client *APIClient) GetPublishers() (*PublishersResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "publishers", gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "publishers", gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -51,17 +45,12 @@ func GetPublishers() (*PublishersResponse, error) {
 	return data, nil
 }
 
-func GetPublisher(publisherId string) (*PublisherResponse, error) {
+func (client *APIClient) GetPublisher(publisherId string) (*PublisherResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("publishers/%s", publisherId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("publishers/%s", publisherId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}

@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 
@@ -36,17 +35,12 @@ type CategoryRecordsResponse struct {
 	Data []*Leaderboard `json:"data"`
 }
 
-func GetCategory(categoryId string) (*CategoryResponse, error) {
+func (client *APIClient) GetCategory(categoryId string) (*CategoryResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("categories/%s", categoryId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("categories/%s", categoryId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -65,17 +59,12 @@ func GetCategory(categoryId string) (*CategoryResponse, error) {
 	return data, nil
 }
 
-func GetCategoryVariables(categoryId string) (*CategoryVariableResponse, error) {
+func (client *APIClient) GetCategoryVariables(categoryId string) (*CategoryVariableResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("categories/%s/variables", categoryId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("categories/%s/variables", categoryId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -94,17 +83,12 @@ func GetCategoryVariables(categoryId string) (*CategoryVariableResponse, error) 
 	return data, nil
 }
 
-func GetCategoryRecords(categoryId string) (*CategoryRecordsResponse, error) {
+func (client *APIClient) GetCategoryRecords(categoryId string) (*CategoryRecordsResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("categories/%s/variables", categoryId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("categories/%s/records", categoryId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}

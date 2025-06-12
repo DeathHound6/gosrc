@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 
@@ -32,17 +31,12 @@ type LevelRecordsResponse struct {
 	Data []*Leaderboard `json:"data"`
 }
 
-func GetLevel(levelId string) (*LevelResponse, error) {
+func (client *APIClient) GetLevel(levelId string) (*LevelResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("levels/%s", levelId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("levels/%s", levelId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -61,17 +55,12 @@ func GetLevel(levelId string) (*LevelResponse, error) {
 	return data, nil
 }
 
-func GetLevelCategories(levelId string) (*LevelCategoriesResponse, error) {
+func (client *APIClient) GetLevelCategories(levelId string) (*LevelCategoriesResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("levels/%s/categories", levelId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("levels/%s/categories", levelId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -90,17 +79,12 @@ func GetLevelCategories(levelId string) (*LevelCategoriesResponse, error) {
 	return data, nil
 }
 
-func GetLevelVariables(levelId string) (*LevelVariablesResponse, error) {
+func (client *APIClient) GetLevelVariables(levelId string) (*LevelVariablesResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("levels/%s/variables", levelId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("levels/%s/variables", levelId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -119,17 +103,12 @@ func GetLevelVariables(levelId string) (*LevelVariablesResponse, error) {
 	return data, nil
 }
 
-func GetLevelRecords(levelId string) (*LevelRecordsResponse, error) {
+func (client *APIClient) GetLevelRecords(levelId string) (*LevelRecordsResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("levels/%s/records", levelId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("levels/%s/records", levelId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}

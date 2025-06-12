@@ -17,8 +17,9 @@ const (
 	HTTPMethodPOST   HTTPMethod = "POST"
 	HTTPMethodPUT    HTTPMethod = "PUT"
 	HTTPMethodDELETE HTTPMethod = "DELETE"
-	APIVersionV1     APIVersion = "v1"
-	APIVersionV2     APIVersion = "v2"
+
+	APIVersionV1 APIVersion = "v1"
+	APIVersionV2 APIVersion = "v2"
 )
 
 var (

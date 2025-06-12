@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"bytes"
 	"encoding/json"
 
 	"github.com/DeathHound6/gosrc"
@@ -21,17 +20,13 @@ type NotificationsResponse struct {
 }
 
 // This endpoint requires Authentication
-func GetNotifications() (*NotificationsResponse, error) {
+func (client *APIClient) GetNotifications() (*NotificationsResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
+		"X-API-Key":    client.token,
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "notifications", gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "notifications", gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}

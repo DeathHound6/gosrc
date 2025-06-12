@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 
@@ -32,17 +31,12 @@ type LeaderboardCategoryResponse struct {
 	Data *Leaderboard `json:"data"`
 }
 
-func GetLeaderboardCategory(gameId string, categoryId string) (*LeaderboardCategoryResponse, error) {
+func (client *APIClient) GetLeaderboardCategory(gameId string, categoryId string) (*LeaderboardCategoryResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("leaderboards/%s/categories/%s", gameId, categoryId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("leaderboards/%s/categories/%s", gameId, categoryId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -61,17 +55,12 @@ func GetLeaderboardCategory(gameId string, categoryId string) (*LeaderboardCateg
 	return data, nil
 }
 
-func GetLeaderboardLevelCategory(gameId string, levelId string, categoryId string) (*LeaderboardCategoryResponse, error) {
+func (client *APIClient) GetLeaderboardLevelCategory(gameId string, levelId string, categoryId string) (*LeaderboardCategoryResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("leaderboards/%s/level/%s/%s", gameId, levelId, categoryId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("leaderboards/%s/level/%s/%s", gameId, levelId, categoryId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}

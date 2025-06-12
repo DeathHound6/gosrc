@@ -1,10 +1,10 @@
 package v2
 
 type Pagination struct {
-	Count   uint `json:"count"`
-	Page    uint `json:"page"`
-	Pages   uint `json:"pages"`
-	PerPage uint `json:"per"`
+	Count   int `json:"count"`
+	Page    int `json:"page"`
+	Pages   int `json:"pages"`
+	PerPage int `json:"per"`
 }
 
 type RunCommentsMode int

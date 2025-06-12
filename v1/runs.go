@@ -140,17 +140,12 @@ type PostRunErrorResponse struct {
 	Links   []*Link  `json:"links"`
 }
 
-func GetRuns() (*RunsResponse, error) {
+func (client *APIClient) GetRuns() (*RunsResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "runs", gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, "runs", gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -169,17 +164,12 @@ func GetRuns() (*RunsResponse, error) {
 	return data, nil
 }
 
-func GetRun(runId string) (*RunResponse, error) {
+func (client *APIClient) GetRun(runId string) (*RunResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("runs/%s", runId), gosrc.HTTPMethodGET, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("runs/%s", runId), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -199,10 +189,11 @@ func GetRun(runId string) (*RunResponse, error) {
 }
 
 // This endpoint requires Authentication
-func PostRun(body *PostRunBody) (*RunResponse, error) {
+func (client *APIClient) PostRun(body *PostRunBody) (*RunResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
+		"X-API-Key":    client.token,
 	}
 	jsonBody, err := json.Marshal(body)
 	if err != nil {
@@ -238,10 +229,11 @@ func PostRun(body *PostRunBody) (*RunResponse, error) {
 }
 
 // This endpoint requires Authentication
-func PutRunStatus(runId string, body *PutRunStatusBody) (*RunResponse, error) {
+func (client *APIClient) PutRunStatus(runId string, body *PutRunStatusBody) (*RunResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
+		"X-API-Key":    client.token,
 	}
 	jsonBody, err := json.Marshal(body)
 	if err != nil {
@@ -268,10 +260,11 @@ func PutRunStatus(runId string, body *PutRunStatusBody) (*RunResponse, error) {
 }
 
 // This endpoint requires Authentication
-func PutRunPlayers(runId string, body *PutRunPlayersBody) (*RunResponse, error) {
+func (client *APIClient) PutRunPlayers(runId string, body *PutRunPlayersBody) (*RunResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
+		"X-API-Key":    client.token,
 	}
 	jsonBody, err := json.Marshal(body)
 	if err != nil {
@@ -298,17 +291,12 @@ func PutRunPlayers(runId string, body *PutRunPlayersBody) (*RunResponse, error) 
 }
 
 // This endpoint requires Authentication
-func DeleteRun(runId string) (*RunResponse, error) {
+func (client *APIClient) DeleteRun(runId string) (*RunResponse, error) {
 	headers := map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 	}
-	jsonBody, err := json.Marshal(map[string]string{})
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(jsonBody)
-	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("runs/%s", runId), gosrc.HTTPMethodDELETE, headers, reqBody)
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV1, fmt.Sprintf("runs/%s", runId), gosrc.HTTPMethodDELETE, headers, nil)
 	if err != nil {
 		return nil, err
 	}
