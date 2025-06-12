@@ -29,6 +29,13 @@ type GetArticleResponse struct {
 	UserList        []string   `json:"userList"`
 }
 
+type GetArticleListResponse struct {
+	Articles   []*Article  `json:"articleList"`
+	Pagination *Pagination `json:"pagination"`
+	GameList   []string    `json:"gameList"`
+	UserList   []string    `json:"userList"`
+}
+
 func GetArticle(id *int, slug *string) (*GetArticleResponse, error) {
 	if id == nil && slug == nil {
 		return nil, errors.New("either id or slug must be provided")
@@ -59,6 +66,39 @@ func GetArticle(id *int, slug *string) (*GetArticleResponse, error) {
 	}
 	data := new(GetArticleResponse)
 	if err := json.Unmarshal(bodyBytes, data); err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
+func GetArticleList(limit *int) (*GetArticleListResponse, error) {
+	query := ""
+	if limit != nil {
+		if *limit <= 0 || *limit > 500 {
+			return nil, errors.New("limit must be between 1 and 500")
+		}
+		query = fmt.Sprintf("limit=%d", *limit)
+	}
+
+	headers := map[string]string{
+		"Accept": "application/json",
+	}
+
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV2, fmt.Sprintf("GetArticleList?%s", query), gosrc.HTTPMethodGET, headers, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	bodyBytes := make([]byte, 0)
+	if _, err := resp.Body.Read(bodyBytes); err != nil {
+		return nil, err
+	}
+	if err := resp.Body.Close(); err != nil {
+		return nil, err
+	}
+	data := new(GetArticleListResponse)
+	if err := json.Unmarshal(bodyBytes, &data); err != nil {
 		return nil, err
 	}
 
