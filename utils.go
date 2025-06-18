@@ -1,6 +1,7 @@
 package gosrc
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -71,4 +72,19 @@ func SliceContains[T comparable](slice []T, item T) bool {
 		}
 	}
 	return false
+}
+
+func ReadBody[T any](body io.ReadCloser) (*T, error) {
+	bodyBytes := make([]byte, 0)
+	if _, err := body.Read(bodyBytes); err != nil {
+		return nil, err
+	}
+	if err := body.Close(); err != nil {
+		return nil, err
+	}
+	data := new(T)
+	if err := json.Unmarshal(bodyBytes, data); err != nil {
+		return nil, err
+	}
+	return data, nil
 }

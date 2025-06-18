@@ -29,14 +29,7 @@ type GetArticleResponse struct {
 	UserList        []string   `json:"userList"`
 }
 
-type GetArticleListResponse struct {
-	Articles   []*Article  `json:"articleList"`
-	Pagination *Pagination `json:"pagination"`
-	GameList   []string    `json:"gameList"`
-	UserList   []string    `json:"userList"`
-}
-
-func GetArticle(id *int, slug *string) (*GetArticleResponse, error) {
+func (Client *APIClient) GetArticle(id *int, slug *string) (*GetArticleResponse, error) {
 	if id == nil && slug == nil {
 		return nil, errors.New("either id or slug must be provided")
 	}
@@ -72,7 +65,14 @@ func GetArticle(id *int, slug *string) (*GetArticleResponse, error) {
 	return data, nil
 }
 
-func GetArticleList(limit *int) (*GetArticleListResponse, error) {
+type GetArticleListResponse struct {
+	Articles   []*Article  `json:"articleList"`
+	Pagination *Pagination `json:"pagination"`
+	GameList   []string    `json:"gameList"`
+	UserList   []string    `json:"userList"`
+}
+
+func (client *APIClient) GetArticleList(limit *int) (*GetArticleListResponse, error) {
 	query := ""
 	if limit != nil {
 		if *limit <= 0 || *limit > 500 {
