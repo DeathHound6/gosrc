@@ -1,5 +1,12 @@
 package v2
 
+import (
+	"errors"
+	"fmt"
+
+	"github.com/DeathHound6/gosrc"
+)
+
 type Game struct {
 	ID                       string          `json:"id"`
 	Name                     string          `json:"name"`
@@ -50,4 +57,37 @@ type GameFollower struct {
 	Pos            *int   `json:"pos"`
 	AccessCount    int    `json:"accessCount"`
 	LastAccessDate int    `json:"lastAccessDate"`
+}
+
+type GameModerator struct {
+	GameID string             `json:"gameId"`
+	UserID string             `json:"userId"`
+	Level  GameModeratorLevel `json:"level"`
+}
+
+func (client *APIClient) GetGameData(params GetGameDataFilters) (*GetGameDataResponse, error) {
+	headers := map[string]string{
+		"Accept": "application/json",
+	}
+
+	filter := map[string]string{}
+	if params.GameID != nil {
+		filter["gameId"] = *params.GameID
+	} else if params.GameURL != nil {
+		filter["gameUrl"] = *params.GameURL
+	} else {
+		return nil, errors.New("either GameID or GameURL must be provided")
+	}
+
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV2, fmt.Sprintf("GetGameData%s", gosrc.MakeURLQuery(filter)), gosrc.HTTPMethodPOST, headers, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	data, err := gosrc.ReadBody[GetGameDataResponse](resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }

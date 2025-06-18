@@ -74,10 +74,6 @@ type Theme struct {
 	StaticAssets        []Asset `json:"staticAssets"`
 }
 
-type GetSessionResponse struct {
-	Session *Session `json:"session"`
-}
-
 func (client *APIClient) GetSession() (*GetSessionResponse, error) {
 	headers := map[string]string{
 		"Accept": "application/json",

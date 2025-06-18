@@ -22,13 +22,6 @@ type Article struct {
 	CommentsCount int      `json:"commentsCount"`
 }
 
-type GetArticleResponse struct {
-	Article         *Article   `json:"article"`
-	RelatedArticles []*Article `json:"relatedArticleList"`
-	GameList        []string   `json:"gameList"`
-	UserList        []string   `json:"userList"`
-}
-
 func (Client *APIClient) GetArticle(id *int, slug *string) (*GetArticleResponse, error) {
 	if id == nil && slug == nil {
 		return nil, errors.New("either id or slug must be provided")
@@ -63,13 +56,6 @@ func (Client *APIClient) GetArticle(id *int, slug *string) (*GetArticleResponse,
 	}
 
 	return data, nil
-}
-
-type GetArticleListResponse struct {
-	Articles   []*Article  `json:"articleList"`
-	Pagination *Pagination `json:"pagination"`
-	GameList   []string    `json:"gameList"`
-	UserList   []string    `json:"userList"`
 }
 
 func (client *APIClient) GetArticleList(limit *int) (*GetArticleListResponse, error) {
