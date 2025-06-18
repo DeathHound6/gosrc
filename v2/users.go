@@ -89,7 +89,7 @@ func (client *APIClient) GetSession() (*GetSessionResponse, error) {
 		return nil, err
 	}
 
-	client.csrfToken = data.Session.CSRFToken
+	client.csrfToken = &data.Session.CSRFToken
 
 	return data, nil
 }
