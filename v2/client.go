@@ -9,6 +9,13 @@ type APIClient struct {
 	csrfToken *string
 }
 
+/*
+Create a new APIClient instance with optional PHP session ID and CSRF token.
+
+Either fields may be used for Authorization purposes when making requests to the API.
+
+Obtaining a CSRF Token requires a valid PHP session ID.
+*/
 func NewAPIClient(phpSessionID *string, csrfToken *string) *APIClient {
 	return &APIClient{
 		phpsessid: phpSessionID,
@@ -16,6 +23,9 @@ func NewAPIClient(phpSessionID *string, csrfToken *string) *APIClient {
 	}
 }
 
+/*
+Apply Authorization values to the request headers and body.
+*/
 func (client *APIClient) ApplyAuthorization(headers map[string]string, body any) {
 	if client.phpsessid != nil {
 		headers["Cookie"] = "PHPSESSID=" + *client.phpsessid

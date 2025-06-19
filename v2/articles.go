@@ -22,6 +22,12 @@ type Article struct {
 	CommentsCount int      `json:"commentsCount"`
 }
 
+/*
+Get a single Article by ID or slug.
+
+Either `id` or `slug` must be provided.
+If both are provided, `id` will be used.
+*/
 func (Client *APIClient) GetArticle(id *int, slug *string) (*GetArticleResponse, error) {
 	if id == nil && slug == nil {
 		return nil, errors.New("either id or slug must be provided")
@@ -34,9 +40,7 @@ func (Client *APIClient) GetArticle(id *int, slug *string) (*GetArticleResponse,
 		query = fmt.Sprintf("slug=%s", *slug)
 	}
 
-	headers := map[string]string{
-		"Accept": "application/json",
-	}
+	headers := map[string]string{}
 
 	resp, err := gosrc.MakeRequest(gosrc.APIVersionV2, fmt.Sprintf("GetArticle?%s", query), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {
@@ -58,6 +62,9 @@ func (Client *APIClient) GetArticle(id *int, slug *string) (*GetArticleResponse,
 	return data, nil
 }
 
+/*
+Get a list of Articles with optional pagination limit.
+*/
 func (client *APIClient) GetArticleList(limit *int) (*GetArticleListResponse, error) {
 	query := ""
 	if limit != nil {
@@ -67,9 +74,7 @@ func (client *APIClient) GetArticleList(limit *int) (*GetArticleListResponse, er
 		query = fmt.Sprintf("limit=%d", *limit)
 	}
 
-	headers := map[string]string{
-		"Accept": "application/json",
-	}
+	headers := map[string]string{}
 
 	resp, err := gosrc.MakeRequest(gosrc.APIVersionV2, fmt.Sprintf("GetArticleList?%s", query), gosrc.HTTPMethodGET, headers, nil)
 	if err != nil {

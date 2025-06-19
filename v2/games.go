@@ -91,10 +91,14 @@ type GameStats struct {
 	Resources     int    `json:"resources"`
 }
 
+/*
+Get information about a game by its ID or URL path.
+
+Either `GameID` or `GameURL` must be provided.
+If both are provided, `GameID` will be used.
+*/
 func (client *APIClient) GetGameData(params struct{ GameID, GameURL *string }) (*GetGameDataResponse, error) {
-	headers := map[string]string{
-		"Accept": "application/json",
-	}
+	headers := map[string]string{}
 
 	filter := map[string]string{}
 	if params.GameID != nil {
@@ -118,10 +122,14 @@ func (client *APIClient) GetGameData(params struct{ GameID, GameURL *string }) (
 	return data, nil
 }
 
+/*
+Get a summary of a game by its ID or URL path.
+
+Either `GameID` or `GameURL` must be provided.
+If both are provided, `GameID` will be used.
+*/
 func (client *APIClient) GetGameSummary(params struct{ GameID, GameURL *string }) (*GetGameSummaryResponse, error) {
-	headers := map[string]string{
-		"Accept": "application/json",
-	}
+	headers := map[string]string{}
 
 	filter := map[string]string{}
 	if params.GameID != nil {

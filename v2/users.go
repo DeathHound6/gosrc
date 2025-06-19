@@ -74,10 +74,12 @@ type Theme struct {
 	StaticAssets        []Asset `json:"staticAssets"`
 }
 
+/*
+Get the session information for the current user.
+*/
 func (client *APIClient) GetSession() (*GetSessionResponse, error) {
-	headers := map[string]string{
-		"Accept": "application/json",
-	}
+	headers := map[string]string{}
+	client.ApplyAuthorization(headers, nil)
 
 	resp, err := gosrc.MakeRequest(gosrc.APIVersionV2, "GetSession", gosrc.HTTPMethodPOST, headers, nil)
 	if err != nil {

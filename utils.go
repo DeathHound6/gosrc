@@ -36,6 +36,9 @@ func MakeRequest(apiVersion APIVersion, endpoint string, method HTTPMethod, head
 		}
 	}
 
+	headers["Accept"] = "application/json"
+	headers["Content-Type"] = "application/json"
+
 	url := fmt.Sprintf("https://speedrun.com/api/%s/%s", apiVersion, endpoint)
 
 	req, err := http.NewRequest(string(method), url, body)
