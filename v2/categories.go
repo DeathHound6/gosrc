@@ -12,7 +12,7 @@ type Category struct {
 	ExactPlayers        bool            `json:"exactPlayers"`
 	PlayerMatchMode     PlayerMatchMode `json:"playerMatchMode"`
 	TimeDirection       TimeDirection   `json:"timeDirection"`
-	EnforceMilliseconds bool            `json:"enforceMilliseconds"`
+	EnforceMilliseconds bool            `json:"enforceMs"`
 	Rules               *string         `json:"rules"`
 	Archived            *bool           `json:"archived"`
 }

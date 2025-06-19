@@ -65,7 +65,33 @@ type GameModerator struct {
 	Level  GameModeratorLevel `json:"level"`
 }
 
-func (client *APIClient) GetGameData(params GetGameDataFilters) (*GetGameDataResponse, error) {
+type GameBoost struct {
+	ID               string   `json:"id"`
+	CreatedAt        int      `json:"createdAt"`
+	UpdatedAt        int      `json:"updatedAt"`
+	GameID           string   `json:"gameId"`
+	DonorUserID      string   `json:"donorUserId"`
+	Anonymous        bool     `json:"anonymous"`
+	RecipientUserIDs []string `json:"recipientUserIds"`
+}
+
+type GameStats struct {
+	GameID        string `json:"gameId"`
+	TotalRuns     int    `json:"totalRuns"`
+	TotalRunsFG   int    `json:"totalRunsFG"`
+	TotalRunsIL   int    `json:"totalRunsIL"`
+	TotalRunTime  int    `json:"totalRunTime"`
+	RecentRuns    int    `json:"recentRuns"`
+	RecentRunsFG  int    `json:"recentRunsFG"`
+	RecentRunsIL  int    `json:"recentRunsIL"`
+	TotalPlayers  int    `json:"totalPlayers"`
+	ActivePlayers int    `json:"activePlayers"`
+	Followers     int    `json:"followers"`
+	Guides        int    `json:"guides"`
+	Resources     int    `json:"resources"`
+}
+
+func (client *APIClient) GetGameData(params struct{ GameID, GameURL *string }) (*GetGameDataResponse, error) {
 	headers := map[string]string{
 		"Accept": "application/json",
 	}
@@ -85,6 +111,33 @@ func (client *APIClient) GetGameData(params GetGameDataFilters) (*GetGameDataRes
 	}
 
 	data, err := gosrc.ReadBody[GetGameDataResponse](resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
+func (client *APIClient) GetGameSummary(params struct{ GameID, GameURL *string }) (*GetGameSummaryResponse, error) {
+	headers := map[string]string{
+		"Accept": "application/json",
+	}
+
+	filter := map[string]string{}
+	if params.GameID != nil {
+		filter["gameId"] = *params.GameID
+	} else if params.GameURL != nil {
+		filter["gameUrl"] = *params.GameURL
+	} else {
+		return nil, errors.New("either GameID or GameURL must be provided")
+	}
+
+	resp, err := gosrc.MakeRequest(gosrc.APIVersionV2, fmt.Sprintf("GetGameSummary%s", gosrc.MakeURLQuery(filter)), gosrc.HTTPMethodPOST, headers, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	data, err := gosrc.ReadBody[GetGameSummaryResponse](resp.Body)
 	if err != nil {
 		return nil, err
 	}
